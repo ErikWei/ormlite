@@ -20,6 +20,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.yxtek.test.model.User;
 
@@ -89,6 +90,51 @@ public class UserDao {
 		try {
 			Dao<User, Integer> dao = DataBaseHelper.getInstance().getUserDao();
 			dao.delete(users);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		DataBaseHelper.closeDb();
+	}
+	
+	public void deleteAll() {
+		DataBaseHelper.openDb(context);
+		
+		try {
+			Dao<User, Integer> dao = DataBaseHelper.getInstance().getUserDao();
+			dao.deleteBuilder().delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		DataBaseHelper.closeDb();
+	}
+	
+	public void delete(int id) {
+		DataBaseHelper.openDb(context);
+		
+		try {
+			Dao<User, Integer> dao = DataBaseHelper.getInstance().getUserDao();
+			dao.deleteById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		DataBaseHelper.closeDb();
+	}
+	
+	/**
+	 * 删除某个name的user
+	 * @param name
+	 */
+	public void deleteByName(String name) {
+		DataBaseHelper.openDb(context);
+		
+		try {
+			Dao<User, Integer> dao = DataBaseHelper.getInstance().getUserDao();
+			DeleteBuilder<User, Integer> builder =  dao.deleteBuilder();
+			builder.where().eq("name", name);
+			builder.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
